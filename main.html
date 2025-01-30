@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Nutritionist Appointment Booking</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('image1.webp') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+      line-height: 1.6;
+      transition: background 1s ease-in-out;
+    }
+    .background-opacity {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255, 255, 255, 0.5);
+      z-index: -1;
+    }
+    header {
+      background: rgba(255, 127, 80, 0.9);
+      color: #fff;
+      padding: 20px;
+      text-align: center;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    main {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      max-width: 800px;
+      margin: 20px auto;
+    }
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+    }
+    input, textarea, select, button {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-size: 1em;
+      box-sizing: border-box;
+    }
+    button {
+      background: #ff7f50;
+      color: white;
+      border: none;
+      font-size: 1.2em;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #e86e3c;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+
+    /* Updated CSS for checkboxes */
+    input[type="checkbox"] {
+      margin-right: 10px;
+      vertical-align: middle;
+      width: auto;
+    }
+    input[type="checkbox"] + label {
+      display: inline-block;
+      vertical-align: middle;
+      margin-bottom: 0;
+    }
+    section input[type="checkbox"] {
+      margin-bottom: 10px;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      main {
+        padding: 10px;
+      }
+      input, textarea, select, button {
+        font-size: 0.9em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="background-opacity"></div>
+  <header>
+    <h1>Book Your Appointment</h1>
+  </header>
+
+  <main>
+    <form id="nutritionistForm" action="http://127.0.0.1:5000/submit" method="POST">
+      <section>
+        <h2>Personal Information</h2>
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required>
+
+        <label for="phone">Phone Number:</label>
+        <input type="tel" id="phone" name="phone" placeholder="Your Contact Number" required>
+        <input type="hidden" id="fullPhone" name="fullPhone">
+
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required>
+
+        <label for="weight">Weight (kg):</label>
+        <input type="number" id="weight" name="weight" required>
+
+        <label for="height">Height (cm):</label>
+        <input type="number" id="height" name="height" required>
+
+        <label for="sex">Sex:</label>
+        <select id="sex" name="sex" required>
+          <option value="">Select</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </section>
+
+      <section>
+        <h2>Medical Information</h2>
+        <label><input type="checkbox" name="medical[]" value="Diabetes"> Diabetes</label><br>
+        <label><input type="checkbox" name="medical[]" value="Hypertension"> Hypertension</label><br>
+        <label><input type="checkbox" name="medical[]" value="Dyslipidemia"> Dyslipidemia</label><br>
+        <label><input type="checkbox" name="medical[]" value="Heart Disease"> Heart Disease</label><br>
+        <label for="medications">Medications:</label>
+        <textarea id="medications" name="medications"></textarea>
+        <label><input type="checkbox" name="medical[]" value="None"> None</label><br>
+      </section>
+
+      <section>
+        <h2>Lifestyle</h2>
+        <label for="activity">Activity Scale:</label>
+        <select id="activity" name="activity" required>
+          <option value="">Select</option>
+          <option value="sedentary">Sedentary</option>
+          <option value="moderate">Moderately Active</option>
+          <option value="active">Highly Active</option>
+        </select>
+
+        <label>Sleep Duration:</label>
+        <select id="sleep" name="sleep" required>
+          <option value="<6-8hrs">Less than 6-8 hours</option>
+          <option value=">6-8hrs">More than 6-8 hours</option>
+        </select>
+
+        <label for="water">Water Intake (Liters per day):</label>
+        <select id="water" name="water" required>
+          <option value="">Select</option>
+          <option value="0.5L">0.5L</option>
+          <option value="1L">1L</option>
+          <option value="1.5L">1.5L</option>
+          <option value="2L">2L</option>
+          <option value="2.5L">2.5L</option>
+          <option value="3L">3L</option>
+          <option value="More than 3L">More than 3L</option>
+        </select>
+
+        <label for="exercise">Exercise Frequency:</label>
+        <select id="exercise" name="exercise" required>
+          <option value="daily">Daily</option>
+          <option value="few_times_week">A few times a week</option>
+          <option value="rarely">Rarely</option>
+          <option value="never">Never</option>
+        </select>
+      </section>
+
+      <section>
+        <h2>Diet and Emotional Eating</h2>
+        <label>Have you been on any type of diet before?</label>
+        <textarea id="diet_experience" name="diet_experience" rows="3" placeholder="Describe your past diet experiences..."></textarea>
+
+        <h3>Do you lose control around food when you’re:</h3>
+        <table>
+          <tr>
+            <th>Emotion</th>
+            <th>Yes</th>
+            <th>No</th>
+          </tr>
+          <tr>
+            <td>😊 Happy</td>
+            <td><input type="radio" name="happy" value="yes"></td>
+            <td><input type="radio" name="happy" value="no"></td>
+          </tr>
+          <tr>
+            <td>😢 Sad</td>
+            <td><input type="radio" name="sad" value="yes"></td>
+            <td><input type="radio" name="sad" value="no"></td>
+          </tr>
+          <tr>
+            <td>🤩 Excited</td>
+            <td><input type="radio" name="excited" value="yes"></td>
+            <td><input type="radio" name="excited" value="no"></td>
+          </tr>
+          <tr>
+            <td>😡 Angry</td>
+            <td><input type="radio" name="angry" value="yes"></td>
+            <td><input type="radio" name="angry" value="no"></td>
+          </tr>
+        </table>
+      </section>
+      <button type="submit">Submit</button>
+    </form>
+  </main>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+  <script>
+    const phoneInput = document.querySelector("#phone");
+    const fullPhoneInput = document.querySelector("#fullPhone");
+
+    const iti = intlTelInput(phoneInput, {
+      initialCountry: "auto",
+      geoIpLookup: function (callback) {
+        fetch('https://ipinfo.io/json?token=<your_token>')
+          .then((response) => response.json())
+          .then((data) => callback(data.country))
+          .catch(() => callback("US"));
+      },
+      utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+    });
+
+    document.querySelector("#nutritionistForm").addEventListener("submit", function (event) {
+      fullPhoneInput.value = iti.getNumber();
+    });
+
+    // Change background image every 5 seconds
+    const images = ['image1.webp', 'image2.webp', 'image3.webp', 'image4.webp']; // Add your images here
+    let index = 0;
+
+    setInterval(() => {
+      document.body.style.backgroundImage = `url('${images[index]}')`;
+      index = (index + 1) % images.length;
+    }, 5000);
+
+    document.querySelector("#nutritionistForm").addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent default form submission
+
+      // WhatsApp number where details will be sent
+      const whatsappNumber = "9710562574770"; // Replace with your actual number (without + or spaces)
+
+      // Collect form data
+      const name = document.querySelector("#name").value;
+      const phone = document.querySelector("#fullPhone").value || document.querySelector("#phone").value;
+      const age = document.querySelector("#age").value;
+      const weight = document.querySelector("#weight").value;
+      const height = document.querySelector("#height").value;
+      const sex = document.querySelector("#sex").value;
+      const medications = document.querySelector("#medications").value || "None";
+      const activity = document.querySelector("#activity").value;
+      const sleep = document.querySelector("#sleep").value;
+      const water = document.querySelector("#water").value;
+      const exercise = document.querySelector("#exercise").value;
+      const dietExperience = document.querySelector("#diet_experience").value || "Not provided";
+
+      // Emotional Eating
+      const happy = document.querySelector("input[name='happy']:checked")?.value || "Not answered";
+      const sad = document.querySelector("input[name='sad']:checked")?.value || "Not answered";
+      const excited = document.querySelector("input[name='excited']:checked")?.value || "Not answered";
+      const angry = document.querySelector("input[name='angry']:checked")?.value || "Not answered";
+
+      // Format WhatsApp Message
+      const message = `📋 *New Nutritionist Appointment Booking* 📋
+    
+  👤 *Name:* ${name}
+  📞 *Phone:* ${phone}
+  🎂 *Age:* ${age}
+  ⚖️ *Weight:* ${weight} kg
+  📏 *Height:* ${height} cm
+  ⚧ *Sex:* ${sex}
+
+  🩺 *Medical Info:* 
+  💊 Medications: ${medications}
+
+  🏃 *Lifestyle Details:*
+  🔥 Activity Scale: ${activity}
+  💤 Sleep: ${sleep}
+  💧 Water Intake: ${water} per day
+  🏋️ Exercise Frequency: ${exercise}
+
+  🥗 *Diet Experience:* ${dietExperience}
+
+  🍽 *Emotional Eating Behavior:*
+  😊 Happy: ${happy}
+  😢 Sad: ${sad}
+  🤩 Excited: ${excited}
+  😡 Angry: ${angry}
+
+  📅 *Submitted via Nutritionist Appointment Form*
+  `;
+
+      // Encode message for WhatsApp URL
+      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+
+      // Redirect to WhatsApp
+      window.location.href = whatsappUrl;
+    });
+  </script>
+</body>
+</html>
