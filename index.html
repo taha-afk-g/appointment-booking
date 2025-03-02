@@ -3,36 +3,50 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nutritionist Appointment Booking</title>
+  <title>Healthy Haven Patient Form</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.min.css">
   <style>
     body {
       font-family: 'Arial', sans-serif;
       margin: 0;
       padding: 0;
-      background: url('image1.webp') no-repeat center center fixed;
+      background: url('logo.png') no-repeat center center fixed;
       background-size: cover;
       color: #333;
       line-height: 1.6;
       transition: background 1s ease-in-out;
     }
+    
     .background-opacity {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
-      background-color: rgba(255, 255, 255, 0.5);
+      background-color: rgba(255, 255, 255, 0.1);
       z-index: -1;
     }
     header {
-      background: rgba(255, 127, 80, 0.9);
-      color: #fff;
+      background: rgba(255, 255, 255, 0.652);
+      color: #000000;
       padding: 20px;
       text-align: center;
       width: 100%;
       box-sizing: border-box;
+      font-size: larger;
     }
+
+    .header-content {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo {
+      width: 100px; /* Adjust the size of your logo as needed */
+      margin-right: 10px; /* Space between the logo and the title */
+    }
+
     main {
       padding: 20px;
       background: rgba(255, 255, 255, 0.9);
@@ -40,11 +54,84 @@
       max-width: 800px;
       margin: 20px auto;
     }
-    label {
-      display: block;
-      margin-bottom: 8px;
-      font-weight: bold;
+    /* Style radio buttons and checkboxes */
+    input[type="radio"],
+    input[type="checkbox"] {
+      appearance: none;
+      width: 20px; /* Increase size for better visibility */
+      height: 20px;
+      border: 2px solid #0ab6bc;
+      border-radius: 50%;
+      display: inline-block;
+      position: relative;
+      cursor: pointer;
+      margin: 0; /* Remove unwanted margin */
+      flex-shrink: 0; /* Prevent shrinking in flexbox */
     }
+
+    /* Square checkboxes */
+    input[type="checkbox"] {
+      border-radius: 4px;
+    }
+
+    /* When checked, apply styles */
+    input[type="radio"]:checked,
+    input[type="checkbox"]:checked {
+      background-color: #0ab6bc;
+      border: 2px solid #008685;
+    }
+
+    /* Inner dot for radio buttons */
+    input[type="radio"]:checked::before {
+      content: "";
+      width: 10px;
+      height: 10px;
+      background-color: white;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Checkmark for checkboxes */
+    input[type="checkbox"]:checked::before {
+      content: "✔";
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* 💯 Perfectly align label text with input */
+    label {
+      display: flex;
+      align-items: center; /* Ensures vertical alignment */
+      font-size: 1.1em;
+      cursor: pointer;
+      gap: 10px; /* Adds spacing between input and text */
+      margin-bottom: 10px;
+      line-height: 1.5; /* Ensures perfect alignment */
+    }
+
+
+    /* Responsive adjustments */
+    @media (max-width: 600px) {
+      input[type="radio"],
+      input[type="checkbox"] {
+        width: 16px;
+        height: 16px;
+      }
+
+      input[type="radio"]:checked::before {
+        width: 8px;
+        height: 8px;
+      }
+    }
+
     input, textarea, select, button {
       width: 100%;
       padding: 12px;
@@ -55,7 +142,7 @@
       box-sizing: border-box;
     }
     button {
-      background: #ff7f50;
+      background: #0ab6bc;
       color: white;
       border: none;
       font-size: 1.2em;
@@ -64,7 +151,7 @@
       transition: background 0.3s;
     }
     button:hover {
-      background: #e86e3c;
+      background: #008685;
     }
     table {
       width: 100%;
@@ -77,243 +164,489 @@
       text-align: center;
     }
 
-    /* Updated CSS for checkboxes */
-    input[type="checkbox"] {
-      margin-right: 10px;
-      vertical-align: middle;
-      width: auto;
-    }
-    input[type="checkbox"] + label {
-      display: inline-block;
-      vertical-align: middle;
-      margin-bottom: 0;
-    }
-    section input[type="checkbox"] {
-      margin-bottom: 10px;
+    /* Style the language selector */
+    #languageSelector {
+      padding: 5px 10px;
+      font-size: 0.9em; /* Make it smaller */
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      background-color: #fff;
+      cursor: pointer;
+      width: 20%;
     }
 
-    /* Responsive adjustments */
+    /* Ensure it doesn't break on smaller screens */
     @media (max-width: 600px) {
-      main {
-        padding: 10px;
-      }
-      input, textarea, select, button {
-        font-size: 0.9em;
+      #languageSelector {
+        font-size: 0.8em;
+        padding: 3px 7px;
       }
     }
+
   </style>
 </head>
 <body>
   <div class="background-opacity"></div>
   <header>
-    <h1>Book Your Appointment</h1>
+    <div class="header-content">
+      <img src="logo.png" alt="Logo" class="logo">
+      <h1 id="header">Patient Form</h1>
+    </div>
   </header>
+
+  
 
   <main>
     <form id="nutritionistForm" action="http://127.0.0.1:5000/submit" method="POST">
       <section>
-        <h2>Personal Information</h2>
-        <label for="name">Name:</label>
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+            <h2 id="personal_info">Personal Information</h2>
+            <select id="languageSelector">
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+            </select>
+        </div>
+        <label for="name" id="nameLabel">Name:</label>
         <input type="text" id="name" name="name" required>
 
-        <label for="phone">Phone Number:</label>
+        <label id="phoneLabel" for="phone">Phone Number:</label>
         <input type="tel" id="phone" name="phone" placeholder="Your Contact Number" required>
         <input type="hidden" id="fullPhone" name="fullPhone">
-
-        <label for="age">Age:</label>
+        
+        <br>
+        <label id ="ageLabel" for="age">Age:</label>
         <input type="number" id="age" name="age" required>
 
-        <label for="weight">Weight (kg):</label>
+        <label id ="weightLabel" for="weight">Weight (kg):</label>
         <input type="number" id="weight" name="weight" required>
 
-        <label for="height">Height (cm):</label>
+        <label for="height" id ="heightLabel" >Height (cm):</label>
         <input type="number" id="height" name="height" required>
 
-        <label for="sex">Sex:</label>
-        <select id="sex" name="sex" required>
-          <option value="">Select</option>
-          <option value="male">Male</option>
-          <option value="female">Female</option>
-        </select>
+        <label for="sex" id ="genderLabel" >Gender</label>
+          <label><input type="radio" name="sex" value="male" id="maleLabel"> Male</label><br>
+          <label><input type="radio" name="sex" value="female" id="femaleLabel"> Female</label>
       </section>
+      <section>
+        <h2 id="goalHeader">Your Goal</h2>
+        <label><input type="checkbox" name="goal[]" value="Lose Weight" id="loseWeight"> Lose Weight</label><br>
+        <label><input type="checkbox" name="goal[]" value="Gain Weight" id="gainWeight"> Gain Weight</label><br>
+        <label><input type="checkbox" name="goal[]" value="Maintain a Healthy Lifestyle" id="healthyLifestyle"> Maintain a Healthy Lifestyle</label><br>
+        <label><input type="checkbox" name="goal[]" value="Manage a Medical Condition" id="medicalCondition"> Manage a Medical Condition</label><br>
+      </section>
+      
 
       <section>
-        <h2>Medical Information</h2>
-        <label><input type="checkbox" name="medical[]" value="Diabetes"> Diabetes</label><br>
-        <label><input type="checkbox" name="medical[]" value="Hypertension"> Hypertension</label><br>
-        <label><input type="checkbox" name="medical[]" value="Dyslipidemia"> Dyslipidemia</label><br>
-        <label><input type="checkbox" name="medical[]" value="Heart Disease"> Heart Disease</label><br>
-        <label for="medications">Medications:</label>
+        <h2 id="medicalInfoHeader">Medical Information</h2>
+        <label><input type="checkbox" name="medical[]" value="Diabetes" id="diabetes"> Diabetes</label><br>
+        <label><input type="checkbox" name="medical[]" value="Hypertension" id="hypertension"> Hypertension</label><br>
+        <label><input type="checkbox" name="medical[]" value="Dyslipidemia" id="dyslipidemia"> Dyslipidemia</label><br>
+        <label><input type="checkbox" name="medical[]" value="Heart Disease" id="heartDisease"> Heart Disease</label><br>
+        <label for="medicalOtherInput" id="medicalOtherLabel">Other (Please specify):</label>
+        <input type="text" name="medical_other" id="medicalOtherInput" placeholder="Specify if other">
+        <h2 for="medications"> Medications:</h2>
         <textarea id="medications" name="medications"></textarea>
-        <label><input type="checkbox" name="medical[]" value="None"> None</label><br>
+        <label><input type="checkbox" name="medications_none" value="None" id="noneLabel"> None</label><br>
       </section>
 
       <section>
-        <h2>Lifestyle</h2>
-        <label for="activity">Activity Scale:</label>
-        <select id="activity" name="activity" required>
-          <option value="">Select</option>
-          <option value="sedentary">Sedentary</option>
-          <option value="moderate">Moderately Active</option>
-          <option value="active">Highly Active</option>
-        </select>
-
-        <label>Sleep Duration:</label>
-        <select id="sleep" name="sleep" required>
-          <option value="<6-8hrs">Less than 6-8 hours</option>
-          <option value=">6-8hrs">More than 6-8 hours</option>
-        </select>
-
-        <label for="water">Water Intake (Liters per day):</label>
-        <select id="water" name="water" required>
-          <option value="">Select</option>
-          <option value="0.5L">0.5L</option>
-          <option value="1L">1L</option>
-          <option value="1.5L">1.5L</option>
-          <option value="2L">2L</option>
-          <option value="2.5L">2.5L</option>
-          <option value="3L">3L</option>
-          <option value="More than 3L">More than 3L</option>
-        </select>
-
-        <label for="exercise">Exercise Frequency:</label>
-        <select id="exercise" name="exercise" required>
-          <option value="daily">Daily</option>
-          <option value="few_times_week">A few times a week</option>
-          <option value="rarely">Rarely</option>
-          <option value="never">Never</option>
-        </select>
-      </section>
+        <h2 id="lifestyleHeader">Lifestyle</h2>
+      
+        <label><input type="radio" name="activity" value="Not Active" id="notActive"> Not Active</label><br>
+        <label><input type="radio" name="activity" value="Moderately Active" id="moderateActive"> Moderately Active</label><br>
+        <label><input type="radio" name="activity" value="Highly Active" id="highlyActive"> Highly Active</label><br>
+        
+        <h2 id="sleepLabel">Sleep Duration:</h2>
+        <label><input type="radio" name="sleep" value="Less than 6-8hrs" id="lessSleep"> Less than 6-8 hours</label><br>
+        <label><input type="radio" name="sleep" value="More than 6-8 hours" id="moreSleep"> More than 6-8 hours</label><br>
+      
+        <h2 for="water" id="waterLabel">Water Intake (Liters per day):</h2>
+        <label><input type="radio" name="water" value="0.5L" id="0.5L"> 0.5L</label><br>
+        <label><input type="radio" name="water" value="1L" id="1L"> 1L</label><br>
+        <label><input type="radio" name="water" value="1.5L" id="1.5L"> 1.5L</label><br>
+        <label><input type="radio" name="water" value="2L" id="2L"> 2L</label><br>
+        <label><input type="radio" name="water" value="2.5L" id="2.5L"> 2.5L</label><br>
+        <label><input type="radio" name="water" value="3L" id="3L"> 3L</label><br>
+        <label><input type="radio" name="water" value="More than 3L" id="moreThan3L"> More than 3L</label><br>
+      
+        <h2 for="exercise" id="exerciseLabel">Exercise Frequency:</h2>
+        <label><input type="radio" name="exercise" value="Daily" id="daily"> Daily</label><br>
+        <label><input type="radio" name="exercise" value="A few times a week" id="fewTimesWeek"> A few times a week</label><br>
+        <label><input type="radio" name="exercise" value="Rarely" id="rarely"> Rarely</label><br>
+        <label><input type="radio" name="exercise" value="Never" id="never"> Never</label><br>
+    </section>
 
       <section>
-        <h2>Diet and Emotional Eating</h2>
-        <label>Have you been on any type of diet before?</label>
+        <h2 id="dietHeader">Diet and Emotional Eating</h2>
+        <label id="dietExperienceLabel">Have you been on any type of diet before?</label>
         <textarea id="diet_experience" name="diet_experience" rows="3" placeholder="Describe your past diet experiences..."></textarea>
 
-        <h3>Do you lose control around food when you’re:</h3>
+        <h3 id="emotionalEatingHeader">Do you lose control around food when you’re:</h3>
         <table>
           <tr>
-            <th>Emotion</th>
-            <th>Yes</th>
-            <th>No</th>
+            <th id="emotionHeader">Emotion</th>
+            <th id="yesHeader">Yes</th>
+            <th id="noHeader">No</th>
           </tr>
           <tr>
-            <td>😊 Happy</td>
-            <td><input type="radio" name="happy" value="yes"></td>
-            <td><input type="radio" name="happy" value="no"></td>
+            <td id="happyLabel">😊 Happy</td>
+            <td><input type="radio" name="happy" value="yes" id="yesHeader"></td>
+            <td><input type="radio" name="happy" value="no" id="noHeader"></td>
           </tr>
           <tr>
-            <td>😢 Sad</td>
-            <td><input type="radio" name="sad" value="yes"></td>
-            <td><input type="radio" name="sad" value="no"></td>
+            <td id="sadLabel">😢 Sad</td>
+            <td><input type="radio" name="sad" value="yes" id="yesHeader"></td>
+            <td><input type="radio" name="sad" value="no" id="noHeader"></td>
           </tr>
           <tr>
-            <td>🤩 Excited</td>
-            <td><input type="radio" name="excited" value="yes"></td>
-            <td><input type="radio" name="excited" value="no"></td>
+            <td id="excitedLabel">🤩 Excited</td>
+            <td><input type="radio" name="excited" value="yes" id="yesHeader"></td>
+            <td><input type="radio" name="excited" value="no" id="noHeader"></td>
           </tr>
           <tr>
-            <td>😡 Angry</td>
-            <td><input type="radio" name="angry" value="yes"></td>
-            <td><input type="radio" name="angry" value="no"></td>
+            <td id="angryLabel">😡 Angry</td>
+            <td><input type="radio" name="angry" value="yes" id="yesHeader"></td>
+            <td><input type="radio" name="angry" value="no" id="noHeader"></td>
+          </tr>
+          <tr>
+            <td id="anxiousLabel">😟 Anxious</td>
+            <td><input type="radio" name="anxious" value="yes" id="yesHeader"></td>
+            <td><input type="radio" name="anxious" value="no" id="noHeader"></td>
+          </tr>
+          <tr>
+            <td id="boredLabel">😑 Bored</td>
+            <td><input type="radio" name="bored" value="yes" id="yesHeader"></td>
+            <td><input type="radio" name="bored" value="no" id="noHeader"></td>
           </tr>
         </table>
       </section>
-      <button type="submit">Submit</button>
+      
+      <section>
+        <h2 id="additionalInfoHeader">Additional Information</h2>
+        <label for="additional_notes" id="additionalNotesLabel">Additional Notes:</label>
+        <textarea id="additional_notes" name="additional_notes" rows="3" placeholder="Any additional notes..." id="additionalNotesPlaceholder"></textarea>
+      </section>
+
+      <button id="submitBtn" type="submit">Submit</button>
     </form>
   </main>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
-  <script>
-    const phoneInput = document.querySelector("#phone");
-    const fullPhoneInput = document.querySelector("#fullPhone");
+<script>
+async function loadLanguage(lang) {
+  try {
+    const response = await fetch('translations.json');
+    const translations = await response.json();
 
-    const iti = intlTelInput(phoneInput, {
-      initialCountry: "auto",
-      geoIpLookup: function (callback) {
-        fetch('https://ipinfo.io/json?token=<your_token>')
-          .then((response) => response.json())
-          .then((data) => callback(data.country))
-          .catch(() => callback("US"));
-      },
-      utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+    document.title = translations[lang]?.title || "Healthy Patient Form";
+
+    // Define all elements to translate
+    const elements = {
+      header: "header",
+      personal_info: "personal_info",
+      nameLabel: "nameLabel",
+      phoneLabel: "phoneLabel",
+      ageLabel: "ageLabel",
+      weightLabel: "weightLabel",
+      heightLabel: "heightLabel",
+      genderLabel: "genderLabel",
+      selectLabel: "selectLabel",
+      maleLabel: "maleLabel",
+      femaleLabel: "femaleLabel",
+      goalHeader: "goalHeader",
+      loseWeight: "loseWeight",
+      gainWeight: "gainWeight",
+      healthyLifestyle: "healthyLifestyle",
+      medicalCondition: "medicalCondition",
+      medicalInfoHeader: "medicalInfoHeader",
+      diabetes: "diabetes",
+      hypertension: "hypertension",
+      dyslipidemia: "dyslipidemia",
+      heartDisease: "heartDisease",
+      medicalOther:"Other",
+      medicalOtherPlaceholder: "Specify if other",
+      medicationsLabel: "medicationsLabel",
+      noneLabel: "noneLabel",
+      lifestyleHeader: "lifestyleHeader",
+      activityLabel: "activityLabel",
+      notActive: "notActive",
+      moderateActive: "moderateActive",
+      highlyActive: "highlyActive",
+      sleepLabel: "sleepLabel",
+      lessSleep: "lessSleep",
+      moreSleep: "moreSleep",
+      waterLabel: "waterLabel",
+      exerciseLabel: "exerciseLabel",
+      daily: "daily",
+      fewTimesWeek: "fewTimesWeek",
+      rarely: "rarely",
+      never: "never",
+      dietHeader: "dietHeader",
+      dietExperienceLabel: "dietExperienceLabel",
+      emotionalEatingHeader: "emotionalEatingHeader",
+      emotionHeader: "emotionHeader",
+      yesHeader: "yesHeader",
+      noHeader: "noHeader",
+      happyLabel: "happyLabel",
+      sadLabel: "sadLabel",
+      excitedLabel: "excitedLabel",
+      angryLabel: "angryLabel",
+      anxiousLabel: "anxiousLabel",
+      boredLabel: "boredLabel",
+      additionalInfoHeader: "additionalInfoHeader",
+      additionalNotesLabel: "additionalNotesLabel",
+      submitBtn: "submit"
+    };
+
+    // Loop through elements and update text content
+    for (const [id, translationKey] of Object.entries(elements)) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = translations[lang]?.[translationKey] || el.textContent;
+      }
+    }
+
+    // Update placeholder text safely
+    const placeholders = {
+      phone: "phonePlaceholder",
+      diet_experience: "dietExperiencePlaceholder",
+      additional_notes: "additionalNotesPlaceholder",
+      medicalOtherInput: "medicalOtherPlaceholder"
+    };
+
+    for (const [id, key] of Object.entries(placeholders)) {
+      const el = document.getElementById(id);
+      if (el) {
+        const translation = translations[lang]?.[key];
+        if (translation) {
+          el.placeholder = translation; // ✅ Only update if translation exists
+        }
+      }
+    }
+
+    for (const [id, keys] of Object.entries(options)) {
+        const selectElement = document.getElementById(id);
+        if (selectElement) {
+            console.log(`🔄 Updating dropdown: ${id}`); // Debug
+            selectElement.innerHTML = ""; // Clear existing options
+
+            keys.forEach(key => {
+                const translatedValue = translations[lang]?.[key] || key; // ✅ Ensure a valid translation
+                const option = document.createElement("option");
+                option.value = key;
+                option.textContent = translatedValue;
+                selectElement.appendChild(option);
+            });
+
+            console.log(`✅ Updated: ${id}`, selectElement.innerHTML); // Debug
+        }
+    }
+    const checkboxTranslations = {
+            loseWeight: "loseWeight",
+            gainWeight: "gainWeight",
+            healthyLifestyle: "healthyLifestyle",
+            medicalCondition: "medicalCondition",
+            diabetes: "diabetes",
+            hypertension: "hypertension",
+            dyslipidemia: "dyslipidemia",
+            heartDisease: "heartDisease",
+            medicalOtherLabel: "medicalOther",
+            medicationsLabel: "medicationsLabel",
+            noneLabel: "noneLabel",
+            happyLabel: "happyLabel",
+            sadLabel: "sadLabel",
+            excitedLabel: "excitedLabel",
+            angryLabel: "angryLabel",
+            anxiousLabel: "anxiousLabel",
+            boredLabel: "boredLabel"
+        };
+
+        for (const [id, key] of Object.entries(checkboxTranslations)) {
+          const inputElement = document.getElementById(id);
+          console.log(inputElement); // Check if it finds the input element
+
+          if (inputElement) {
+            const label = inputElement.closest("label");
+            console.log(label); // Check if it finds the label element
+            
+            if (label) {
+              // Update the label's inner HTML with the translated text
+              label.innerHTML = `<input type="${inputElement.type}" id="${id}" name="${inputElement.name}" value="${inputElement.value}"> ${translations[lang][key] || label.textContent}`;
+            } else {
+              console.log(`Label not found for input with ID: ${id}`);
+            }
+          } else {
+            console.log(`Input not found with ID: ${id}`);
+          }
+        }
+
+
+        const medicalOtherLabel = document.getElementById("medicalOtherLabel");
+          if (medicalOtherLabel) {
+            const translatedText = translations[lang]["medicalOther"];
+            if (translatedText) {
+              medicalOtherLabel.textContent = translatedText;
+            }
+          }
+
+
+        const medicationsLabel = document.querySelector("label[for='medications']");
+        if (medicationsLabel) medicationsLabel.childNodes[0].nodeValue = translations[lang]["medicationsLabel"] + ": ";
+
+    // Adjust text direction based on language
+    document.body.style.direction = lang === "ar" ? "rtl" : "ltr";
+    document.body.style.textAlign = lang === "ar" ? "right" : "left";
+  } catch (error) {
+    console.error("Translation error:", error);
+  }
+}
+
+// Listen for language selection change
+document.getElementById("languageSelector").addEventListener("change", function () {
+  loadLanguage(this.value);
+});
+
+// Initialize phone input
+const phoneInput = document.querySelector("#phone");
+const fullPhoneInput = document.querySelector("#fullPhone");
+
+const iti = intlTelInput(phoneInput, {
+  initialCountry: "auto",
+  geoIpLookup: function (callback) {
+    callback("LB"); // Default to the US instead of fetching
+  },
+  utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/utils.js"
+});
+
+document.querySelector("#nutritionistForm").addEventListener("submit", function (event) {
+    event.preventDefault(); // Prevent default form submission
+
+    console.log("🚀 Form submission started...");  // ✅ Debugging step
+
+    // Ensure language selection is working
+    const lang = document.getElementById("languageSelector").value;
+    console.log("🌍 Selected Language:", lang); 
+
+    // Ensure phone input works
+    fullPhoneInput.value = iti.getNumber();
+    if (!fullPhoneInput.value.startsWith("+")) {
+        fullPhoneInput.value = "+" + iti.getSelectedCountryData().dialCode + phoneInput.value.trim();
+    }
+    console.log("📞 Phone Number Processed:", fullPhoneInput.value);
+
+    // Collect form data
+    const formData = new FormData(this);
+    const formObject = {};
+    formData.forEach((value, key) => {
+        formObject[key] = value;
     });
 
-    document.querySelector("#nutritionistForm").addEventListener("submit", function (event) {
-      fullPhoneInput.value = iti.getNumber();
+    console.log("✅ Form Data Collected:", formObject);
+
+    // Check if values are valid
+    if (!formObject.name || !formObject.phone) {
+        console.log("❌ ERROR: Name or Phone is missing!");
+        alert("Please fill in all required fields.");
+        return;
+    }
+
+
+    // Collect checkboxes
+    const goals = Array.from(document.querySelectorAll("input[name='goal[]']:checked")).map(cb => cb.value);
+    let medicalConditions = Array.from(document.querySelectorAll("input[name='medical[]']:checked")).map(cb => cb.value);
+
+    // Check if "Other" is selected and append the additional input
+    const medicalOtherInput = document.getElementById("medicalOtherInput");
+    if (medicalOtherInput.value.trim() !== "") {
+        medicalConditions.push(`Other: ${medicalOtherInput.value.trim()}`);
+    }
+    let medications = formObject.medications?.trim() || "Not provided";
+    if (document.querySelector("#noneLabel").checked) medications = "None";
+    // Collect Emotional Eating Responses
+    const emotionsList = ["happy", "sad", "excited", "angry", "anxious", "bored"];
+    const emotions = emotionsList.map(emotion => {
+        return `${lang === "ar" ? getArabicEmotion(emotion) : capitalizeFirstLetter(emotion)}: ${
+            document.querySelector(`input[name='${emotion}']:checked`)?.value || "Not answered"
+        }`;
     });
+    // Define a function to get the selected dropdown text instead of the value
+    function getSelectedText(selectId) {
+        const select = document.getElementById(selectId);
+        return select.options[select.selectedIndex].text; // Get the visible text
+    }
 
-    // Change background image every 5 seconds
-    const images = ['image1.webp', 'image2.webp', 'image3.webp', 'image4.webp']; // Add your images here
-    let index = 0;
+    const additionalNotes = formObject.additional_notes?.trim() || "Not provided";
+    // Construct WhatsApp message
+    const whatsappNumber = "96181826856"; // Your WhatsApp number
+    const message = `
+👤 *${lang === "ar" ? "الاسم" : "Name"}:* ${formObject.name}
+📞 *${lang === "ar" ? "رقم الهاتف" : "Phone"}:* ${formObject.fullPhone || formObject.phone}
+🎂 *${lang === "ar" ? "العمر" : "Age"}:* ${formObject.age}
+⚖️ *${lang === "ar" ? "الوزن" : "Weight"}:* ${formObject.weight} kg
+📏 *${lang === "ar" ? "الطول" : "Height"}:* ${formObject.height} cm
+⚧ *${lang === "ar" ? "الجنس" : "Gender"}:* ${formObject.sex}
 
-    setInterval(() => {
-      document.body.style.backgroundImage = `url('${images[index]}')`;
-      index = (index + 1) % images.length;
-    }, 5000);
+🎯 *${lang === "ar" ? "الأهداف" : "Goals"}:* ${goals.join(", ") || (lang === "ar" ? "لا توجد أهداف محددة" : "No specific goals selected")}
 
-    document.querySelector("#nutritionistForm").addEventListener("submit", function (event) {
-      event.preventDefault(); // Prevent default form submission
+🩺 *${lang === "ar" ? "المعلومات الطبية" : "Medical Info"}:* ${medicalConditions.join(", ") || (lang === "ar" ? "لا توجد معلومات طبية" : "No medical conditions reported")}
 
-      // WhatsApp number where details will be sent
-      const whatsappNumber = "96181826856"; // Replace with your actual number (without + or spaces)
+💊 *${lang === "ar" ? "الأدوية" : "Medications"}:* ${medications}
 
-      // Collect form data
-      const name = document.querySelector("#name").value;
-      const phone = document.querySelector("#fullPhone").value || document.querySelector("#phone").value;
-      const age = document.querySelector("#age").value;
-      const weight = document.querySelector("#weight").value;
-      const height = document.querySelector("#height").value;
-      const sex = document.querySelector("#sex").value;
-      const medications = document.querySelector("#medications").value || "None";
-      const activity = document.querySelector("#activity").value;
-      const sleep = document.querySelector("#sleep").value;
-      const water = document.querySelector("#water").value;
-      const exercise = document.querySelector("#exercise").value;
-      const dietExperience = document.querySelector("#diet_experience").value || "Not provided";
+🏃 *${lang === "ar" ? "نمط الحياة" : "Lifestyle Details"}:*
+🔥 *${lang === "ar" ? "مستوى النشاط" : "Activity Scale"}:* ${formObject.activity}
+💤 *${lang === "ar" ? "النوم" : "Sleep"}:* ${formObject.sleep}
+💧 *${lang === "ar" ? "كمية الماء" : "Water Intake"}:* ${formObject.water} per day
+🏋️ *${lang === "ar" ? "ممارسة الرياضة" : "Exercise Frequency"}:* ${formObject.exercise}
 
-      // Emotional Eating
-      const happy = document.querySelector("input[name='happy']:checked")?.value || "Not answered";
-      const sad = document.querySelector("input[name='sad']:checked")?.value || "Not answered";
-      const excited = document.querySelector("input[name='excited']:checked")?.value || "Not answered";
-      const angry = document.querySelector("input[name='angry']:checked")?.value || "Not answered";
+🥗 *${lang === "ar" ? "تجربة الحمية الغذائية" : "Diet Experience"}:* ${formObject.diet_experience || "Not provided"}
 
-      // Format WhatsApp Message
-      const message = `📋 *New Nutritionist Appointment Booking* 📋
-    
-  👤 *Name:* ${name}
-  📞 *Phone:* ${phone}
-  🎂 *Age:* ${age}
-  ⚖️ *Weight:* ${weight} kg
-  📏 *Height:* ${height} cm
-  ⚧ *Sex:* ${sex}
+😋 *${lang === "ar" ? "الأكل العاطفي" : "Emotional Eating"}:* 
+${emotions.join("\n")}
 
-  🩺 *Medical Info:* 
-  💊 Medications: ${medications}
+📝 *${lang === "ar" ? "معلومات إضافية" : "Additional Information"}:* 
+${additionalNotes}
 
-  🏃 *Lifestyle Details:*
-  🔥 Activity Scale: ${activity}
-  💤 Sleep: ${sleep}
-  💧 Water Intake: ${water} per day
-  🏋️ Exercise Frequency: ${exercise}
 
-  🥗 *Diet Experience:* ${dietExperience}
+📅 *${lang === "ar" ? "تم الإرسال عبر نموذج حجز موعد التغذية" : "Submitted via Healthy Haven Patient Form"}*`;
 
-  🍽 *Emotional Eating Behavior:*
-  😊 Happy: ${happy}
-  😢 Sad: ${sad}
-  🤩 Excited: ${excited}
-  😡 Angry: ${angry}
+    console.log("📩 WhatsApp Message Created:", message);
 
-  📅 *Submitted via Nutritionist Appointment Form*
-  `;
+    // Redirect to WhatsApp
+    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    console.log("🔗 Redirecting to:", whatsappUrl);
 
-      // Encode message for WhatsApp URL
-      const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+    // Ensure Redirection Happens
+    setTimeout(() => {
+        window.location.href = whatsappUrl;
+    }, 500); // Redirect after 500ms delay
 
-      // Redirect to WhatsApp
-      window.location.href = whatsappUrl;
-    });
-  </script>
-</body>
+    console.log("✅ Redirect Triggered.");
+});
+
+/**
+ * Helper function to capitalize first letter
+ */
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+/**
+ * Converts emotion names to Arabic if needed.
+ */
+function getArabicEmotion(emotion) {
+    const arabicEmotions = {
+        happy: "سعيد",
+        sad: "حزين",
+        excited: "متحمس",
+        angry: "غاضب",
+        anxious: "قلق",
+        bored: "ضجر"
+    };
+    return arabicEmotions[emotion] || emotion;
+}
+
+
+</script>
+
+</body>  
 </html>
+
