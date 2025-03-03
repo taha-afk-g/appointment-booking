@@ -244,7 +244,7 @@
         <label><input type="checkbox" name="medical[]" value="Heart Disease" id="heartDisease"> Heart Disease</label><br>
         <label for="medicalOtherInput" id="medicalOtherLabel">Other (Please specify):</label>
         <input type="text" name="medical_other" id="medicalOtherInput" placeholder="Specify if other">
-        <h2 for="medications"> Medications:</h2>
+        <h2 id="medicationsLabel"> Medications:</h2>
         <textarea id="medications" name="medications"></textarea>
         <label><input type="checkbox" name="medications_none" value="None" id="noneLabel"> None</label><br>
       </section>
@@ -337,7 +337,12 @@ async function loadLanguage(lang) {
     const response = await fetch('translations.json');
     const translations = await response.json();
 
-    document.title = translations[lang]?.title || "Healthy Patient Form";
+
+    if (!translations[lang]) {
+          console.error(`Translations for language "${lang}" not found.`);
+          return;
+        }
+    document.title = translations[lang]?.title || "Healthy Haven Patient Form";
 
     // Define all elements to translate
     const elements = {
@@ -414,68 +419,49 @@ async function loadLanguage(lang) {
     };
 
     for (const [id, key] of Object.entries(placeholders)) {
-      const el = document.getElementById(id);
-      if (el) {
-        const translation = translations[lang]?.[key];
-        if (translation) {
-          el.placeholder = translation; // ✅ Only update if translation exists
+          const el = document.getElementById(id);
+          if (el && translations[lang][key]) {
+            el.placeholder = translations[lang][key];
+          }
         }
-      }
-    }
-
-    for (const [id, keys] of Object.entries(options)) {
-        const selectElement = document.getElementById(id);
-        if (selectElement) {
-            console.log(`🔄 Updating dropdown: ${id}`); // Debug
-            selectElement.innerHTML = ""; // Clear existing options
-
-            keys.forEach(key => {
-                const translatedValue = translations[lang]?.[key] || key; // ✅ Ensure a valid translation
-                const option = document.createElement("option");
-                option.value = key;
-                option.textContent = translatedValue;
-                selectElement.appendChild(option);
-            });
-
-            console.log(`✅ Updated: ${id}`, selectElement.innerHTML); // Debug
-        }
-    }
+    // Translating checkboxes and radio buttons
     const checkboxTranslations = {
-            loseWeight: "loseWeight",
-            gainWeight: "gainWeight",
-            healthyLifestyle: "healthyLifestyle",
-            medicalCondition: "medicalCondition",
-            diabetes: "diabetes",
-            hypertension: "hypertension",
-            dyslipidemia: "dyslipidemia",
-            heartDisease: "heartDisease",
-            medicalOtherLabel: "medicalOther",
-            medicationsLabel: "medicationsLabel",
-            noneLabel: "noneLabel",
-            happyLabel: "happyLabel",
-            sadLabel: "sadLabel",
-            excitedLabel: "excitedLabel",
-            angryLabel: "angryLabel",
-            anxiousLabel: "anxiousLabel",
-            boredLabel: "boredLabel"
+          loseWeight: "loseWeight",
+          gainWeight: "gainWeight",
+          healthyLifestyle: "healthyLifestyle",
+          medicalCondition: "medicalCondition",
+          diabetes: "diabetes",
+          hypertension: "hypertension",
+          dyslipidemia: "dyslipidemia",
+          heartDisease: "heartDisease",
+          noneLabel: "noneLabel",
+          notActive: "notActive",
+          moderateActive: "moderateActive",
+          highlyActive: "highlyActive",
+          lessSleep: "lessSleep",
+          moreSleep: "moreSleep",
+          daily: "daily",
+          fewTimesWeek: "fewTimesWeek",
+          rarely: "rarely",
+          never: "never"
         };
 
-        for (const [id, key] of Object.entries(checkboxTranslations)) {
+    // Update labels for checkboxes and radio buttons
+    for (const [id, key] of Object.entries(checkboxTranslations)) {
           const inputElement = document.getElementById(id);
-          console.log(inputElement); // Check if it finds the input element
-
           if (inputElement) {
-            const label = inputElement.closest("label");
-            console.log(label); // Check if it finds the label element
-            
+            // Find the closest label (either wrapping the input or using 'for' attribute)
+            const label = inputElement.closest('label') || document.querySelector(`label[for="${id}"]`);
             if (label) {
-              // Update the label's inner HTML with the translated text
-              label.innerHTML = `<input type="${inputElement.type}" id="${id}" name="${inputElement.name}" value="${inputElement.value}"> ${translations[lang][key] || label.textContent}`;
-            } else {
-              console.log(`Label not found for input with ID: ${id}`);
+              // Keep the input in place and update only the label text
+              const labelText = translations[lang]?.[key] || label.textContent;
+              const inputNode = label.querySelector('input');
+              if (inputNode) {
+                label.innerHTML = ''; // Clear label
+                label.appendChild(inputNode); // Re-add input element
+                label.append(` ${labelText}`); // Add translated label text
+              }
             }
-          } else {
-            console.log(`Input not found with ID: ${id}`);
           }
         }
 
@@ -496,14 +482,20 @@ async function loadLanguage(lang) {
     document.body.style.direction = lang === "ar" ? "rtl" : "ltr";
     document.body.style.textAlign = lang === "ar" ? "right" : "left";
   } catch (error) {
-    console.error("Translation error:", error);
-  }
-}
-
-// Listen for language selection change
-document.getElementById("languageSelector").addEventListener("change", function () {
-  loadLanguage(this.value);
-});
+        console.error("Error loading translations:", error);
+      }
+    }
+    
+    // Event listener to trigger language change
+    document.getElementById('languageSelector').addEventListener('change', function () {
+      const selectedLanguage = this.value;
+      loadLanguage(selectedLanguage);
+    });
+    
+    // Load the default language (English) on page load
+    document.addEventListener("DOMContentLoaded", function() {
+      loadLanguage('en');
+    });
 
 // Initialize phone input
 const phoneInput = document.querySelector("#phone");
