@@ -212,16 +212,21 @@
         <label id="phoneLabel" for="phone">Phone Number:</label>
         <input type="tel" id="phone" name="phone" placeholder="Your Contact Number" required>
         <input type="hidden" id="fullPhone" name="fullPhone">
+        <span id="error" style="color: red; display: none;">Please enter a valid phone number</span>
+
         
         <br>
-        <label id ="ageLabel" for="age">Age:</label>
-        <input type="number" id="age" name="age" required>
+        <label id="ageLabel" for="age">Age:</label>
+        <input type="text" id="age" name="age" maxlength="3" required>
+        <span id="error1" class="error"></span><br>
 
-        <label id ="weightLabel" for="weight">Weight (kg):</label>
-        <input type="number" id="weight" name="weight" required>
+        <label id="weightLabel" for="weight">Weight (kg):</label>
+        <input type="text" id="weight" name="weight" maxlength="3" required>
+        <span id="error2" class="error"></span><br>
 
-        <label for="height" id ="heightLabel" >Height (cm):</label>
-        <input type="number" id="height" name="height" required>
+        <label id="heightLabel" for="height">Height (cm):</label>
+        <input type="text" id="height" name="height" maxlength="3" required>
+        <span id="error3" class="error"></span><br>
 
         <label for="sex" id ="genderLabel" >Gender</label>
           <label><input type="radio" name="sex" value="male" id="maleLabel"> Male</label><br>
@@ -261,13 +266,13 @@
         <label><input type="radio" name="sleep" value="More than 6-8 hours" id="moreSleep"> More than 6-8 hours</label><br>
       
         <h2 for="water" id="waterLabel">Water Intake (Liters per day):</h2>
-        <label><input type="radio" name="water" value="0.5L" id="0.5L"> 0.5L</label><br>
-        <label><input type="radio" name="water" value="1L" id="1L"> 1L</label><br>
-        <label><input type="radio" name="water" value="1.5L" id="1.5L"> 1.5L</label><br>
-        <label><input type="radio" name="water" value="2L" id="2L"> 2L</label><br>
-        <label><input type="radio" name="water" value="2.5L" id="2.5L"> 2.5L</label><br>
-        <label><input type="radio" name="water" value="3L" id="3L"> 3L</label><br>
-        <label><input type="radio" name="water" value="More than 3L" id="moreThan3L"> More than 3L</label><br>
+        <label><input type="radio" name="water" value="0.5L" id="zeroPointFiveL"> 0.5 liters</label><br>
+        <label><input type="radio" name="water" value="1L" id="oneL"> 1 liters</label><br>
+        <label><input type="radio" name="water" value="1.5L" id="onePointFiveL"> 1.5 liters</label><br>
+        <label><input type="radio" name="water" value="2L" id="twoL"> 2 liters</label><br>
+        <label><input type="radio" name="water" value="2.5L" id="twoPointFiveL"> 2.5 liters</label><br>
+        <label><input type="radio" name="water" value="3L" id="threeL"> 3 liters</label><br>
+        <label><input type="radio" name="water" value="More than 3L" id="moreThanThreeL"> More than 3 liters</label><br>
       
         <h2 for="exercise" id="exerciseLabel">Exercise Frequency:</h2>
         <label><input type="radio" name="exercise" value="Daily" id="daily"> Daily</label><br>
@@ -401,6 +406,79 @@ async function loadLanguage(lang) {
       additionalNotesLabel: "additionalNotesLabel",
       submitBtn: "submit"
     };
+    // Function to convert Arabic numerals to English numerals
+    function convertArabicToEnglish(input) {
+      const arabicNumerals = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+      let englishEquivalent = input;
+
+      // Replace Arabic numerals with English numerals
+      arabicNumerals.forEach((arabicDigit, index) => {
+        const regex = new RegExp(arabicDigit, 'g');
+        englishEquivalent = englishEquivalent.replace(regex, index);
+      });
+
+      return englishEquivalent;
+    }
+
+    // Function to handle validation for number inputs (up to 3 digits)
+    function handleNumberInput(inputId, errorId) {
+      const inputElement = document.getElementById(inputId);
+      const errorElement = document.getElementById(errorId);
+
+      inputElement.addEventListener('input', function(event) {
+        let inputValue = event.target.value;
+
+        // Convert Arabic numerals to English numerals
+        inputValue = convertArabicToEnglish(inputValue);
+
+        // Validate the input: allow only digits and up to 3 characters
+        if (/^\d{0,3}$/.test(inputValue)) {
+          // Valid input (only digits, and no more than 3)
+          event.target.setCustomValidity('');
+          errorElement.style.display = 'none';
+        } else {
+          // Invalid input (more than 3 digits or contains non-digit characters)
+          event.target.setCustomValidity('Please enter a valid number (up to 3 digits)');
+          errorElement.style.display = 'block';
+        }
+
+        // Update the visible input with the converted (English) value
+        event.target.value = inputValue;
+      });
+    }
+
+    // Apply validation to all the inputs that need number validation
+    handleNumberInput('age', 'error1');
+    handleNumberInput('weight', 'error2');
+    handleNumberInput('height', 'error3');
+
+    // General function for validating phone input
+    function validateNumericInput(inputElement, hiddenElement, errorElement) {
+      let inputValue = inputElement.value;
+
+      // Convert Arabic numerals to English numerals
+      inputValue = convertArabicToEnglish(inputValue);
+
+      // Check if input contains only digits
+      if (/^\d*$/.test(inputValue)) {
+        // Valid input (only digits)
+        inputElement.setCustomValidity('');
+        hiddenElement.value = inputValue; // Update the hidden input
+        errorElement.style.display = 'none'; // Hide error message
+      } else {
+        // Invalid input (contains non-digit characters)
+        inputElement.setCustomValidity('Please enter a valid number');
+        errorElement.style.display = 'block'; // Show error message
+      }
+
+      // Update the visible input with the converted (English) value
+      inputElement.value = inputValue;
+    }
+
+    // Handle phone input validation
+    document.getElementById('phone').addEventListener('input', function(event) {
+      validateNumericInput(event.target, document.getElementById('fullPhone'), document.getElementById('error'));
+    });
 
     // Loop through elements and update text content
     for (const [id, translationKey] of Object.entries(elements)) {
@@ -443,7 +521,17 @@ async function loadLanguage(lang) {
           daily: "daily",
           fewTimesWeek: "fewTimesWeek",
           rarely: "rarely",
-          never: "never"
+          never: "never",
+          maleLabel: "maleLabel",
+          femaleLabel: "femaleLabel",
+          zeroPointFiveL: "zeroPointFiveL",
+          oneL: "oneL",
+          onePointFiveL: "onePointFiveL",
+          twoL: "twoL",
+          twoPointFiveL: "twoPointFiveL",
+          threeL: "threeL",
+          moreThanThreeL: "moreThanThreeL"
+
         };
 
     // Update labels for checkboxes and radio buttons
