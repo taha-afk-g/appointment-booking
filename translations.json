@@ -29,11 +29,9 @@
     "noneLabel": "None",
     "lifestyleHeader": "Lifestyle",
     "activityLabel": "Activity Scale",
-    "activity": {
-      "notActive": "Not Active",
-      "moderate": "Moderately Active",
-      "active": "Highly Active"
-    },    
+    "notActive": "Not Active",
+    "moderateActive": "Moderately Active",
+    "highlyActive": "Highly Active",   
     "sleepLabel": "Sleep Duration",
     "lessSleep": "Less than 6-8 hours",
     "moreSleep": "More than 6-8 hours",
